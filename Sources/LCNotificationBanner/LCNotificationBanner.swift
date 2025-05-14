@@ -416,22 +416,33 @@ public class LCNotificationBanner: NSView {
     }
     
     
+    
     /// 从 LCNotificationBanner.bundle 中加载指定名称的图片
-    ///
-    /// - Parameter imageName: 图片文件名（例如 `"success_white@2x.png"`）
-    /// - Returns: 加载的 `NSImage` 对象；如果加载失败，则返回空白 `NSImage()`
+    /// 支持 `.bundle` 嵌套在 `.bundle` 的结构（CocoaPods 默认行为）
+    /// - Parameter imageName: 图片名称
+    /// - Returns: 加载的 NSImage
     private class func bundleImage(_ imageName: String) -> NSImage {
-        // 从当前类的 Bundle 中获取 LCProgressHUD.bundle
-        guard let resourceBundle = Bundle(for: LCNotificationBanner.self).url(forResource: "LCNotificationBanner", withExtension: "bundle"),
-              let bundle = Bundle(url: resourceBundle) else {
+        // 先获取主资源 Bundle
+        guard let outerBundleURL = Bundle(for: LCNotificationBanner.self)
+                .url(forResource: "LCNotificationBanner", withExtension: "bundle"),
+              let outerBundle = Bundle(url: outerBundleURL) else {
+            print("❌ 无法加载外层 LCNotificationBanner.bundle")
             return NSImage()
         }
-        // 尝试加载图片
-        guard let imagePath = bundle.path(forResource: imageName, ofType: nil),
+        
+        // 再尝试获取内层嵌套的 LCNotificationBanner.bundle（CocoaPods 的行为）
+        let nestedBundleURL = outerBundle.url(forResource: "LCNotificationBanner", withExtension: "bundle")
+        let finalBundle = nestedBundleURL.flatMap { Bundle(url: $0) } ?? outerBundle
+
+        // 加载图片
+        guard let imagePath = finalBundle.path(forResource: imageName, ofType: nil),
               let image = NSImage(contentsOfFile: imagePath) else {
+            print("❌ 无法找到图片 \(imageName) in \(finalBundle.bundlePath)")
             return NSImage()
         }
+
         return image
     }
+    
     
 }
