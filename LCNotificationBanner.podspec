@@ -3,7 +3,7 @@ Pod::Spec.new do |spec|
 
   spec.name         = "LCNotificationBanner"
   
-  spec.version      = "1.0.2"
+  spec.version      = "1.0.3"
   
   spec.summary      = "LCNotificationBanner is a lightweight macOS notification banner component!"
   
