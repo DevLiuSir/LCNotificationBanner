@@ -19,6 +19,9 @@ public enum LCNotificationBannerMode {
     /// 显示`错误图标`和`状态消息文本`
     case error(view: NSView)
     
+    /// 显示`警告图标`和`状态消息文本`
+    case warning(view: NSView)
+    
     /// 仅显示`状态消息文本`
     case text
     
@@ -33,6 +36,10 @@ public enum LCNotificationBannerMode {
             return .success(view: view)
         case .error:
             return .error(view: view)
+        case .info:
+            return .info(view: view)
+        case .warning:
+            return .warning(view: view)
         case .custom:
             return .custom(view: view)
         default:

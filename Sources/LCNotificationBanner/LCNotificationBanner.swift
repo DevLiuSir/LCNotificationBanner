@@ -246,6 +246,12 @@ public class LCNotificationBanner: NSView {
         showStatus(status, type: .info, style: style)
     }
     
+    /// 显示`警告状态`信息
+    public class func showWarningWithStatus(_ status: String, style: LCNotificationBannerStyle = .auto, to window: NSWindow?) {
+        LCNotificationBanner.shared.parentWindow = window
+        showStatus(status, type: .warning, style: style)
+    }
+    
     /// 只显示`文本信息`的方法
     ///
     /// - Parameter status: 显示的纯文本内容
@@ -370,6 +376,8 @@ public class LCNotificationBanner: NSView {
             mode = .error(view: NSView())
         case .info:
             mode = .info(view: NSView())
+        case .warning:
+            mode = .warning(view: NSView())
         }
         
         // 获取对应图标图像，考虑当前风格（自动、浅色、深色）
@@ -411,6 +419,12 @@ public class LCNotificationBanner: NSView {
                 imageName = NSApp.effectiveAppearance.name == .darkAqua ? "info_white@2x.png" : "info_black@2x.png"
             } else {
                 imageName = style.isEqual(to: .dark) ? "info_white@2x.png" : "info_black@2x.png"
+            }
+        case .warning:
+            if style.isEqual(to: .auto) {
+                imageName = NSApp.effectiveAppearance.name == .darkAqua ? "warning_white@2x.png" : "warning_black@2x.png"
+            } else {
+                imageName = style.isEqual(to: .dark) ? "warning_white@2x.png" : "warning_black@2x.png"
             }
         default:
             return nil
