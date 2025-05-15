@@ -40,14 +40,25 @@ public enum LCNotificationBannerPosition {
 
 ## Preview of Notification Animations
 
-| ![](Design/top_success.gif) | ![](Design/top_error.gif) | ![](Design/top_info.gif)|
-| :------------: | :------------: | :------------: |
-| Success | Error |  Info  |
+| ![](Design/top_success.gif) | ![](Design/top_error.gif) |
+| :------------: | :------------: |
+| Success | Error |
 
 
-| ![](Design/top_only_text.gif) | ![](Design/rightCenter.gif) | ![](Design/leftCenter.gif) |  ![](Design/bottom.gif) |
+| ![](Design/top_info.gif) | ![](Design/top_warning.gif) |
+| :------------: | :------------: |
+| Info | Warning |
+
+
+| ![](Design/top_only_text.gif) |  ![](Design/bottom.gif) |
 | :------------: | :------------: | :------------: | :------------: |
-|  Only Text | rightCenter  | leftCenter | bottom|
+|  Only Text | bottom |
+
+
+| ![](Design/rightCenter.gif) | ![](Design/leftCenter.gif)
+| :------------: | :------------: |
+|rightCenter  | leftCenter |
+
 
 
 
@@ -84,6 +95,14 @@ LCNotificationBanner.showErrorWithStatus("This is a banner title", style: .dark,
 ```swift
 LCNotificationBanner.showInfoWithStatus("This is a banner title", style: .dark, to: view.window)
 ```
+
+
+- Warning type
+
+```swift
+LCNotificationBanner.showWarningWithStatus("This is a banner title", style: .dark, to: view.window)
+```
+
 
 - Text type only
 
