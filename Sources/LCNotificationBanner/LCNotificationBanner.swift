@@ -19,12 +19,12 @@ public class LCNotificationBanner: NSView {
     
     /// 通知横幅显示位置（默认顶部）
     public var position: LCNotificationBannerPosition = .top
-    
     /// 横幅背景颜色（默认系统蓝）
     public var bgColor: CGColor = NSColor.systemBlue.cgColor
-    
     /// 图标大小
     public var iconSize: CGFloat = 20
+    /// 标题字体大小
+    public var titleFontSize: CGFloat = 16
     
     // MARK: - 样式控制
     
@@ -35,8 +35,6 @@ public class LCNotificationBanner: NSView {
     
     /// 当前正在展示的通知横幅实例，便于在显示新横幅时隐藏旧横幅
     private static var currentBanner: LCNotificationBanner?
-    
-    
     /// 图标
     private let iconImageView = NSImageView()
     /// 主题
@@ -91,16 +89,15 @@ public class LCNotificationBanner: NSView {
     ///   - icon: 可选图标图像
     ///   - title: 标题文本
     ///   - message: 可选的附加消息
-    ///   - color: 背景色（默认为系统蓝色）
-    ///   - iconSize: 图标大小
-    ///   - position: 横幅显示位置（顶部、底部、左、右）
-    init(parentWindow: NSWindow, icon: NSImage?, title: String, message: String? = nil, color: CGColor = NSColor.systemBlue.cgColor, iconSize: CGFloat,  position: LCNotificationBannerPosition) {
+    private init(parentWindow: NSWindow, icon: NSImage?, title: String, message: String? = nil) {
         super.init(frame: .zero)
         
-        self.position = position
+        self.iconSize = LCNotificationBanner.shared.iconSize
+        self.titleFontSize = LCNotificationBanner.shared.titleFontSize
+        self.bgColor = LCNotificationBanner.shared.bgColor
+        self.position = LCNotificationBanner.shared.position
+        
         self.parentWindow = parentWindow
-        self.bgColor = color
-        self.iconSize = iconSize
         
         configIcon(icon: icon)
         setupTitleLabel(title: title)
@@ -120,7 +117,7 @@ public class LCNotificationBanner: NSView {
     /// 配置标题
     private func setupTitleLabel(title: String) {
         titleLabel.stringValue = title
-        titleLabel.font = NSFont.boldSystemFont(ofSize: 16)
+        titleLabel.font = NSFont.boldSystemFont(ofSize: titleFontSize)
         titleLabel.textColor = bgColor == .white ? .black : .white
         titleLabel.wantsLayer = true
         titleLabel.backgroundColor = .orange
@@ -257,11 +254,8 @@ public class LCNotificationBanner: NSView {
     /// - Parameter status: 显示的纯文本内容
     public class func showTextWithStatus(_ status: String, to window: NSWindow?) {
         guard let window = window else { return }
-        let postion = LCNotificationBanner.shared.position
-        let backgroundColor = LCNotificationBanner.shared.bgColor
-        let iconSize = LCNotificationBanner.shared.iconSize
         // 不提供图标
-        let banner = LCNotificationBanner(parentWindow: window, icon: nil, title: status, color: backgroundColor, iconSize: iconSize, position: postion)
+        let banner = LCNotificationBanner(parentWindow: window, icon: nil, title: status)
         banner.show()
     }
     
@@ -362,11 +356,6 @@ public class LCNotificationBanner: NSView {
         // 获取当前用于显示通知的窗口
         guard let window = LCNotificationBanner.shared.parentWindow else { return }
         
-        // 获取当前的`位置`和`背景颜色`
-        let postion = LCNotificationBanner.shared.position
-        let backgroundColor = LCNotificationBanner.shared.bgColor
-        let iconSize = LCNotificationBanner.shared.iconSize
-        
         // 根据通知类型构建对应的图标模式（此处 view 是占位的，为了与 .success/.error/.info 枚举匹配）
         let mode: LCNotificationBannerMode
         switch type {
@@ -384,9 +373,7 @@ public class LCNotificationBanner: NSView {
         guard let icon = imageForStatus(mode, style: style) else { return }
         
         // 构建通知横幅视图，传入必要参数
-        let banner = LCNotificationBanner(parentWindow: window, icon: icon, title: status, color: backgroundColor, iconSize: iconSize, position: postion)
-        
-        // 展示通知横幅
+        let banner = LCNotificationBanner(parentWindow: window, icon: icon, title: status)
         banner.show()
     }
     
@@ -439,7 +426,7 @@ public class LCNotificationBanner: NSView {
     private class func bundleImage(_ imageName: String) -> NSImage {
         // 先获取主资源 Bundle
         guard let outerBundleURL = Bundle(for: LCNotificationBanner.self)
-                .url(forResource: "LCNotificationBanner", withExtension: "bundle"),
+            .url(forResource: "LCNotificationBanner", withExtension: "bundle"),
               let outerBundle = Bundle(url: outerBundleURL) else {
             print("❌ 无法加载外层 LCNotificationBanner.bundle")
             return NSImage()
@@ -448,7 +435,7 @@ public class LCNotificationBanner: NSView {
         // 再尝试获取内层嵌套的 LCNotificationBanner.bundle（CocoaPods 的行为）
         let nestedBundleURL = outerBundle.url(forResource: "LCNotificationBanner", withExtension: "bundle")
         let finalBundle = nestedBundleURL.flatMap { Bundle(url: $0) } ?? outerBundle
-
+        
         // 加载图片
         guard let imagePath = finalBundle.path(forResource: imageName, ofType: nil),
               let image = NSImage(contentsOfFile: imagePath) else {
