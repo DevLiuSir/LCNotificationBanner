@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./Design/icon.png" width="200">
+<img src="./Design/icon.png" width="500">
 
 <p align="center"> <b>LCNotificationBanner is a lightweight macOS notification banner component!</b></p>
 
