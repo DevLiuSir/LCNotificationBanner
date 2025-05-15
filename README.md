@@ -51,7 +51,7 @@ public enum LCNotificationBannerPosition {
 
 
 | ![](Design/top_only_text.gif) |  ![](Design/bottom.gif) |
-| :------------: | :------------: | :------------: | :------------: |
+| :------------: | :------------: |
 |  Only Text | bottom |
 
 
