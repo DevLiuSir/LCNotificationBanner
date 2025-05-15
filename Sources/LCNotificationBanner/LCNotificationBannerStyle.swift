@@ -9,13 +9,13 @@ import Cocoa
 
 /// `NotificationBanner` 的颜色方案枚举
 public enum LCNotificationBannerStyle {
-    /// `ProgressHUDStyle` 有浅色背景，*深色* 文字和进度指示器
+    /// 浅色背景，*深色* 文字和进度指示器
     case light
-    /// `ProgressHUDStyle` 有深色背景，*浅色* 文字和进度指示器
+    /// 深色背景，*浅色* 文字和进度指示器
     case dark
-    /// `ProgressHUDStyle` 根据系统外观（深色/浅色模式）自动切换
+    /// 根据系统外观（深色/浅色模式）自动切换
     case auto
-    /// `ProgressHUDStyle` 自定义前景和背景颜色
+    /// 自定义前景和背景颜色
     case custom(foreground: NSColor, background: NSColor)
     
     /// 根据枚举类型获取 `背景颜色`

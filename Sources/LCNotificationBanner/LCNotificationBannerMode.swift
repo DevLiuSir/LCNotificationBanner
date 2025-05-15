@@ -7,7 +7,7 @@
 
 import Cocoa
 
-// ProgressHUD操作模式
+/// 通知横幅的样式
 public enum LCNotificationBannerMode {
     
     /// 显示`信息图标`和`状态消息文本`

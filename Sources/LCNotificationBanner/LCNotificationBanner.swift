@@ -23,6 +23,9 @@ public class LCNotificationBanner: NSView {
     /// 横幅背景颜色（默认系统蓝）
     public var bgColor: CGColor = NSColor.systemBlue.cgColor
     
+    /// 图标大小
+    public var iconSize: CGFloat = 20
+    
     // MARK: - 样式控制
     
     /// 样式（默认自动，内部使用）
@@ -57,9 +60,6 @@ public class LCNotificationBanner: NSView {
     /// 垂直间距
     private let verticalPadding: CGFloat = 10
     
-    /// 图标大小
-    private let iconSize: CGFloat = 25
-    
     /// 图标和文字之间间距
     private let spacingBetweenIconAndText: CGFloat = 10
     
@@ -92,13 +92,15 @@ public class LCNotificationBanner: NSView {
     ///   - title: 标题文本
     ///   - message: 可选的附加消息
     ///   - color: 背景色（默认为系统蓝色）
+    ///   - iconSize: 图标大小
     ///   - position: 横幅显示位置（顶部、底部、左、右）
-    init(parentWindow: NSWindow, icon: NSImage?, title: String, message: String? = nil, color: CGColor = NSColor.systemBlue.cgColor, position: LCNotificationBannerPosition) {
+    init(parentWindow: NSWindow, icon: NSImage?, title: String, message: String? = nil, color: CGColor = NSColor.systemBlue.cgColor, iconSize: CGFloat,  position: LCNotificationBannerPosition) {
         super.init(frame: .zero)
         
         self.position = position
         self.parentWindow = parentWindow
         self.bgColor = color
+        self.iconSize = iconSize
         
         configIcon(icon: icon)
         setupTitleLabel(title: title)
@@ -111,7 +113,7 @@ public class LCNotificationBanner: NSView {
     /// 配置图标
     private func configIcon(icon: NSImage?) {
         iconImageView.image = icon
-        //        iconImageView.image?.isTemplate = true
+        //iconImageView.image?.isTemplate = true
         iconImageView.imageScaling = .scaleProportionallyUpOrDown
         addSubview(iconImageView)
     }
@@ -251,9 +253,9 @@ public class LCNotificationBanner: NSView {
         guard let window = window else { return }
         let postion = LCNotificationBanner.shared.position
         let backgroundColor = LCNotificationBanner.shared.bgColor
-        
+        let iconSize = LCNotificationBanner.shared.iconSize
         // 不提供图标
-        let banner = LCNotificationBanner(parentWindow: window, icon: nil, title: status, color: backgroundColor, position: postion)
+        let banner = LCNotificationBanner(parentWindow: window, icon: nil, title: status, color: backgroundColor, iconSize: iconSize, position: postion)
         banner.show()
     }
     
@@ -357,6 +359,7 @@ public class LCNotificationBanner: NSView {
         // 获取当前的`位置`和`背景颜色`
         let postion = LCNotificationBanner.shared.position
         let backgroundColor = LCNotificationBanner.shared.bgColor
+        let iconSize = LCNotificationBanner.shared.iconSize
         
         // 根据通知类型构建对应的图标模式（此处 view 是占位的，为了与 .success/.error/.info 枚举匹配）
         let mode: LCNotificationBannerMode
@@ -373,7 +376,7 @@ public class LCNotificationBanner: NSView {
         guard let icon = imageForStatus(mode, style: style) else { return }
         
         // 构建通知横幅视图，传入必要参数
-        let banner = LCNotificationBanner(parentWindow: window, icon: icon, title: status, color: backgroundColor, position: postion)
+        let banner = LCNotificationBanner(parentWindow: window, icon: icon, title: status, color: backgroundColor, iconSize: iconSize, position: postion)
         
         // 展示通知横幅
         banner.show()
@@ -415,8 +418,6 @@ public class LCNotificationBanner: NSView {
         return bundleImage(imageName)
     }
     
-    
-    
     /// 从 LCNotificationBanner.bundle 中加载指定名称的图片
     /// 支持 `.bundle` 嵌套在 `.bundle` 的结构（CocoaPods 默认行为）
     /// - Parameter imageName: 图片名称
@@ -440,9 +441,9 @@ public class LCNotificationBanner: NSView {
             print("❌ 无法找到图片 \(imageName) in \(finalBundle.bundlePath)")
             return NSImage()
         }
-
         return image
     }
+    
     
     
 }
