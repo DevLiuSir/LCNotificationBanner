@@ -78,6 +78,18 @@ LCNotificationBanner.shared.bgColor = NSColor.systemBlue.cgColor
 LCNotificationBanner.shared.position = .top
 ```
 
+- Icon size
+
+```swift
+LCNotificationBanner.shared.iconSize = 20
+```
+
+- Title Font size
+
+```swift        
+LCNotificationBanner.shared.titleFontSize = 14
+```
+
 - Success type
 
 ```swift
