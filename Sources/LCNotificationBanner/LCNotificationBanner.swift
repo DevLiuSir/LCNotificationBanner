@@ -45,10 +45,9 @@ public class LCNotificationBanner: NSView {
     /// 横幅的高度
     private var bannerHeight: CGFloat = 0 {
         didSet {
-            let cornerRadius = bannerHeight / 2.25
             wantsLayer = true
             layer?.backgroundColor = bgColor
-            layer?.cornerRadius = cornerRadius
+            layer?.cornerRadius = bannerHeight / 2
         }
     }
     
